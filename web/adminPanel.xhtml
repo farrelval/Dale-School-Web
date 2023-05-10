@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://xmlns.jcp.org/jsf/html" 
+      xmlns:f="http://xmlns.jcp.org/jsf/core" 
+      xmlns:b="http://bootsfaces.net/ui" 
+      xmlns:p="http://primefaces.org/ui">
+  <h:head>
+    <title>Books Data</title>
+  </h:head>
+  <h:body>
+    <style type="text/css">
+      .ui-row-editor .ui-row-editor-pencil {
+        margin-left: 8px;
+      }
+    </style>
+    <p:dialog id="bookDetail2" widgetVar="$bookDetail2" header="Add Book" hideEffect="explode" appendTo="@(body)" resizable="false" draggable="false" closeOnEscape="true">
+      <h:form>
+        <b:panelGrid columns="2">
+            
+            <b:inputText id="name" label="Name" value="#{beanBiodata.biodata.name}" placeholder="Name" />
+            <b:inputText id="gender" label="Gender" value="#{beanBiodata.biodata.gender}" placeholder="Gender" />
+            <p:calendar id="birth" value="#{beanBiodata.biodata.birth}" label="Birth" required="true" pattern="dd/MM/yyyy" effect="slideDown" requiredMessage="Please Enter Birth Date!" navigator="true" showButtonPanel="true" yearRange="c-60:c+60" placeholder="Birth" />
+            <b:inputText id="address" label="Address" value="#{beanBiodata.biodata.address}" placeholder="Address" />
+            <b:inputText id="class_" label="Class" value="#{beanBiodata.biodata.class_}" placeholder="Class" />
+            <b:inputText id="religion" label="Religion" value="#{beanBiodata.biodata.religion}" placeholder="Religion" />
+            <b:commandButton value="Update" ajax="true" icon="ui-icon-disk" actionListener="#{beanBiodata.updateData()}" oncomplete="PF('$bookDetail2').hide()" update="@(.bookEditable)" />
+          <b:commandButton id="cancelAddButtonId" value="Cancel" onclick="handleComplete(xhr, status, args)" />
+        </b:panelGrid>
+      </h:form>
+    </p:dialog>
+    <p:dialog id="bookDetail1" widgetVar="$bookDetail1" header="AddBook" hideEffect="explode" appendTo="@(body)" resizable="false" draggable="false" closeOnEscape="true">
+      <h:form>
+        <b:panelGrid columns="2" class="editClass">
+            <b:inputText id="nis" value="#{beanBiodata.newBio.nis}" label="NIS" placeholder="NIS" />
+            <b:inputText id="name" label="Name" value="#{beanBiodata.newBio.name}" placeholder="Name" />
+            <b:inputText id="gender" label="Gender" value="#{beanBiodata.newBio.gender}" placeholder="Gender" />
+            <p:calendar id="birth" value="#{beanBiodata.newBio.birth}" label="Birth" required="true" pattern="dd/MM/yyyy" effect="slideDown" requiredMessage="Please Enter Birth Date!" navigator="true" showButtonPanel="true" yearRange="c-60:c+60" placeholder="birth" />
+            <b:inputText id="address" label="Address" value="#{beanBiodata.newBio.address}" placeholder="Address" />
+            <b:inputText id="class_" label="Class" value="#{beanBiodata.newBio.class_}" placeholder="Class" />
+            <b:inputText id="religion" label="Religion" value="#{beanBiodata.newBio.religion}" placeholder="Religion" />
+            <b:commandButton value="Add" process="@form" id="AddButtonId" ajax="true" icon="ui-icon-plus" actionListener="#{beanBiodata.saveData()}" oncomplete="PF('$bookDetail1').hide()" update="@(.bookEditable)" />
+          <b:commandButton process="@form" ajax="true" id="cancelAddButtonId" value="Cancel" onclick="handleComplete(xhr, status, args)" update="@(.bookEditable)" />
+        </b:panelGrid>
+      </h:form>
+    </p:dialog>
+    <div class="card">
+          <h:form>
+            <b:commandButton value="Add" icon="edit" ajax="true" oncomplete="PF('$bookDetail1').show()" id="addUserBtn" style="margin-bottom: 10px;" />
+            <b:dataTable value="#{beanBiodata.allRecords}" var="bio"  class="bookEditable">
+              <b:dataTableColumn value="#{bio.nis}" />
+              <b:dataTableColumn value="#{bio.name}" />
+              <b:dataTableColumn value="#{bio.gender}" />
+              <b:dataTableColumn value="#{bio.birth}" />
+              <b:dataTableColumn value="#{bio.address}" />
+              <b:dataTableColumn value="#{bio.class_}" />
+              <b:dataTableColumn value="#{bio.religion}" />
+              <b:dataTableColumn value="" label="Action">
+                  <p:commandButton value="Delete" icon="pi-trash" action="#{beanBiodata.deleteData()}">
+                  <f:ajax execute="@this" render="@form" />
+                </p:commandButton>
+                  <p:commandButton styleClass="ui-button-raised ui-button-info ui-button-flat" icon="ui-icon-pencil" id="editUserBtn" value="Edit  ..." ajax="true" actionListener="#{beanBiodata.changeBiodata(bio)}" update=":bookDetail2" oncomplete="PF('$bookDetail2').show()" />
+              </b:dataTableColumn>
+            </b:dataTable>
+          </h:form>
+    </div>
+  </h:body>
+</html>
